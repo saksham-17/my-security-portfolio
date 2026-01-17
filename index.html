@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Analyst | Malware Research Portfolio</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. CORE VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #050505;
+            --bg-panel: rgba(20, 20, 20, 0.7);
+            --primary-accent: #00ff41; /* Cyber Green */
+            --secondary-accent: #00b8ff; /* Cyber Blue */
+            --text-main: #e0e0e0;
+            --text-muted: #858585;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: default; /* Enforce default cursor unless on link */
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1a1a1a 0%, transparent 70%),
+                linear-gradient(0deg, transparent 24%, rgba(0, 255, 65, 0.03) 25%, rgba(0, 255, 65, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 255, 65, 0.03) 75%, rgba(0, 255, 65, 0.03) 76%, transparent 77%, transparent);
+            background-size: 100% 100%, 50px 50px;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-accent); }
+
+        /* --- 2. LAYOUT --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-accent);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            margin-left: 2rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover { color: var(--primary-accent); }
+
+        /* --- 3. HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .glitch-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--secondary-accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .bio {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- 4. CARDS (GLASSMORPHISM) --- */
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary-accent);
+            margin: 4rem 0 2rem 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .card .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--primary-accent);
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* --- 5. FOOTER --- */
+        footer {
+            margin-top: 6rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding-bottom: 2rem;
+            border-top: 1px solid #222;
+            padding-top: 2rem;
+        }
+
+        /* --- 6. ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Selection Color */
+        ::selection {
+            background: var(--primary-accent);
+            color: #000;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="container">
+        <header>
+            <div class="logo">./SOC_Analyst</div>
+            <nav>
+                <a href="#projects">PROJECTS</a>
+                <a href="#skills">ARSENAL</a>
+                <a href="#about">ABOUT</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1 class="glitch-text">DEFENDING THE NETWORK</h1>
+            <p class="subtitle">> Malware Researcher | Reverse Engineer | SOC Analyst</p>
+            <p class="bio">
+                Specializing in threat detection, malware dissection, and building secure infrastructure. 
+                Bridging the gap between engineering and cybersecurity.
+            </p>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">01. DEPLOYED PROJECTS</h2>
+            <div class="grid">
+                <div class="card">
+                    <span class="tag">THREAT INTEL</span>
+                    <h3>Real-Time Threat Feed</h3>
+                    <p>An aggregated dashboard for live cybersecurity news and CVE updates. Built to monitor the threat landscape instantly.</p>
+                </div>
+
+                <div class="card">
+                    <span class="tag">MALWARE ANALYSIS</span>
+                    <h3>Ransomware De-obfuscation</h3>
+                    <p>Reverse engineered a live ransomware sample. Documented the kill chain, extracted IOCs, and created YARA rules.</p>
+                </div>
+
+                <div class="card">
+                    <span class="tag">NETWORKING</span>
+                    <h3>Secure DNS Infrastructure</h3>
+                    <p>Designed a custom DNS routing setup to filter malicious traffic at the network edge using Pi-hole and Unbound.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2 class="section-title">02. TECHNICAL ARSENAL</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Analysis Tools</h3>
+                    <p style="color: var(--text-muted);">Ghidra • x64dbg • Wireshark • Process Hacker • IDA Pro</p>
+                </div>
+                <div class="card">
+                    <h3>Defensive Ops</h3>
+                    <p style="color: var(--text-muted);">Splunk • SIEM Management • YARA Rule Writing • Traffic Analysis</p>
+                </div>
+                <div class="card">
+                    <h3>Languages</h3>
+                    <p style="color: var(--text-muted);">Python • Assembly (x86/64) • C/C++ • Bash Scripting</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>SYSTEM SECURE. UNAUTHORIZED ACCESS PROHIBITED.</p>
+            <p style="margin-top: 10px; font-family: 'JetBrains Mono';">© 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // DISABLE RIGHT CLICK
+        document.addEventListener('contextmenu', event => {
+            event.preventDefault();
+        });
+
+        // DISABLE KEYBOARD SHORTCUTS FOR INSPECT
+        document.onkeydown = function(e) {
+            // F12
+            if(e.keyCode == 123) {
+                return false;
+            }
+            // Ctrl+Shift+I (Inspect)
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            // Ctrl+Shift+J (Console)
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            // Ctrl+Shift+C (Element Selector)
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+                return false;
+            }
+            // Ctrl+U (View Source)
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        };
+
+        // DETECT DEVTOOLS OPENING (Console Warning)
+        // This logs a warning if someone forces the console open
+        const element = new Image();
+        Object.defineProperty(element, 'id', {
+          get: function() {
+            console.clear();
+            console.log('%c STOP! ', 'color: red; font-size: 50px; font-weight: bold;');
+            console.log('%c This allows browser features intended for developers. If someone told you to copy-paste something here, it is a scam.', 'font-size: 20px;');
+          }
+        });
+        console.log(element);
+    </script>
+
+</body>
+</html>
